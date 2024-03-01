@@ -9,7 +9,7 @@ int existeNo(ListaVertice *grafo, char *no){
     int i = 0;
     while (grafo != NULL)
     {
-       if (strcmp(grafo->u, no) == 1)
+       if (strcmp(grafo->v, no) == 1)
        {
         return i;
        }
@@ -49,9 +49,9 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo)
         else if (strcmp(comando, "pode_ir") == 0)
         {
             char *token = strtok(conteudo, ",");
-            if (grafo->u == '\0')
+            if (grafo->v == '\0')
             {
-                strcpy(grafo->u, token);
+                strcpy(grafo->v, token);
                 grafo->listaAresta = alocaAresta();
                 token = strtok(NULL, ",");
                 strcpy(grafo->listaAresta->v, token);
@@ -68,7 +68,7 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo)
                         grafo = grafo->prox;
                     }
                     grafo->prox = alocaVertice();
-                    strcpy(grafo->u, token);
+                    strcpy(grafo->v, token);
                     grafo->listaAresta = alocaAresta();
                     token = strtok(NULL, ",");
                     strcpy(grafo->listaAresta->v, token);

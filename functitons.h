@@ -9,9 +9,6 @@
 
 typedef struct noListaAresta
 {
-    char v[10];
-    unsigned int peso;
-    struct noListaAresta *prox;
     char v[10]; // vertices da aresta u -> v
     unsigned int peso; // peso da aresta
     struct noListaAresta *prox; // proximo elemento da lista
@@ -19,7 +16,7 @@ typedef struct noListaAresta
 
 typedef struct noListaVertice
 {
-    char u[10]; // o vertice
+    char v[10]; // o vertice
     struct noListaAresta *listaAresta; // lista de arestas saindo desse vertice
     struct noListaAresta *listaHeuristica; // lista de arestas com heuristica saindo desse vertice
     struct noListaVertice *prox; // proximo elemento da lista
