@@ -7,7 +7,7 @@
 
 typedef struct noListaAresta
 {
-    char u[10], v[10];
+    char v[10];
     unsigned int peso;
     struct noListaAresta *prox;
 } ListaAresta;
