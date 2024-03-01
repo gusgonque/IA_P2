@@ -44,7 +44,7 @@ int leArquivo(char *inicio, char *fim)
         memset(aux, 0, sizeof(aux));
         memset(conteudo, 0, sizeof(conteudo));
         memset(comando, 0, sizeof(comando));
-    }
+    }//
 
     fclose(f);
 
