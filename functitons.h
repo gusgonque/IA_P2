@@ -24,6 +24,7 @@ ListaAresta *alocaAresta();
 
 ListaVertice *alocaVertice();
 
+// oi
 void desalocaAresta(ListaAresta *l);
 
 void desalocaVertice(ListaVertice *l);
