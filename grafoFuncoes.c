@@ -47,17 +47,23 @@ void desalocaVertice(ListaVertice *l)
     }
 }
 
-bool existeVertice(ListaVertice *grafo, char *no)
+int existeVertice(ListaVertice *grafo, char *no)
 {
-    while (grafo != NULL)
+    int i = 0;
+    ListaVertice *aux = grafo;
+    while (aux != NULL)
     {
-        if (strcmp(grafo->v, no) == 0)
+        if (strcmp(aux->v, no) == 0)
         {
-            return true;
+            return i;
+        }
+        else
+        {
+            i++;
+            aux = aux->prox;
         }
     }
-    return false;
-
+    return -1;
 }
 
 void insereVertice(ListaVertice *grafo, char *no)
@@ -101,14 +107,14 @@ ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
 void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
 {
     ListaVertice *auxV = grafo;
-    if (!existeVertice(auxV, u))
+    int aux = existeVertice(auxV, u);
+    if (aux == -1)
     {
         insereVertice(auxV, u);
     }
     else
     {
-        while (strcmp(auxV->v, u) != 0)
-        {
+        for (int i = 0; i < aux; ++i) {
             auxV = auxV->prox;
         }
     }

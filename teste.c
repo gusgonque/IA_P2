@@ -8,7 +8,7 @@ int main(){
     char pontoFinal[20];
     ListaVertice *grafo;
     grafo = alocaVertice();
-    leArquivo(pontoInicial, pontoFinal, grafo, "exemplo.txt");
+    leArquivo(pontoInicial, pontoFinal, grafo, "../exemplo.txt"); // Estou mudando o caminho devido à minha IDE
 
 
     printf("pI = %s\n", pontoInicial);

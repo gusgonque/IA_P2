@@ -30,9 +30,9 @@ void desalocaAresta(ListaAresta *l);
 
 void desalocaVertice(ListaVertice *l);
 
-// entrada: a lista q se deseja fazer a procura e o objeto a ser encontrado
-// saida: se existir na lista devolve a posição caso ao contrario devolve -1
-bool existeVertice(ListaVertice *grafo, char *no);
+// entrada: a lista qual se deseja fazer a procura e o objeto a ser encontrado
+// saida: se existir na lista retorna a posição, caso contrario retorna -1
+int existeVertice(ListaVertice *grafo, char *no);
 
 // Retorna o nó inserido
 void insereVertice(ListaVertice *grafo, char *no);
