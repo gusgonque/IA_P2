@@ -1,5 +1,5 @@
-#ifndef IA_P2_FUNCTITONS_H
-#define IA_P2_FUNCTITONS_H
+#ifndef IA_P2_GRAFOFUNCOES_H
+#define IA_P2_GRAFOFUNCOES_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@ typedef struct noListaAresta
 typedef struct noListaVertice
 {
     char v[10]; // o vertice
-    struct noListaAresta *listaAresta; // lista de arestas saindo desse vertice
+    struct noListaAresta *listaAresta; // lista de arestas sem heuristica saindo desse vertice
     struct noListaAresta *listaHeuristica; // lista de arestas com heuristica saindo desse vertice
     struct noListaVertice *prox; // proximo elemento da lista
 } ListaVertice;
@@ -30,7 +30,19 @@ void desalocaAresta(ListaAresta *l);
 
 void desalocaVertice(ListaVertice *l);
 
-// Função que representa o grafo em um arquivo .dot e .png
-void representaGrafo(ListaVertice *cabListaV, char *nomArq);
+// entrada: a lista q se deseja fazer a procura e o objeto a ser encontrado
+// saida: se existir na lista devolve a posição caso ao contrario devolve -1
+int existeVertice(ListaVertice *grafo, char *no);
 
-#endif //IA_P2_FUNCTITONS_H
+// Retorna o nó inserido
+ListaVertice *insereVertice(ListaVertice *grafo, char *no);
+
+ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso);
+
+// Retorna o nó inserido
+ListaAresta *insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica);
+
+// Função que representa o grafo em um arquivo .dot e .png
+void representaGrafo(ListaVertice *grafo, char *nomArq);
+
+#endif //IA_P2_GRAFOFUNCOES_H

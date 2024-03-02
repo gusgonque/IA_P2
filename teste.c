@@ -1,23 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "functitons.h"
-
-// entrada: a lista q se deseja fazer a procura e o objeto a ser encontrado
-// saida: se existir na lista devolve a posição caso ao contrario devolve -1
-int existeNo(ListaVertice *grafo, char *no){
-    int i = 0;
-    while (grafo != NULL)
-    {
-       if (strcmp(grafo->v, no) == 1)
-       {
-        return i;
-       }
-    i++;  
-    }
-    return -1;
-    
-}
+#include "grafoFuncoes.h"
 
 int leArquivo(char *inicio, char *fim, ListaVertice *grafo)
 {
@@ -60,7 +44,7 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo)
             }
             else
             {
-                pos = existeNo(grafo, token);
+                pos = existeVertice(grafo, token);
                 if (pos == -1)
                 {
                     while (grafo->prox != NULL)
@@ -110,11 +94,11 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo)
         }
         else if (strcmp(comando, "h") == 0)
         {
-            
+            // TODO heuristica
         }
         else
         {
-            printf("Comando desconhecido\n");
+            wprintf(L"Comando desconhecido no arquivo.\n");
             return 1;
         }
         memset(linha, 0, sizeof(linha));
@@ -138,5 +122,7 @@ int main(){
 
     printf("pI = %s\n", pontoInicial);
     printf("pF = %s\n", pontoFinal);
+
+
 }
 

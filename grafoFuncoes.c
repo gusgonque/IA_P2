@@ -1,4 +1,4 @@
-#include "functitons.h"
+#include "grafoFuncoes.h"
 
 ListaAresta *alocaAresta()
 {
@@ -47,9 +47,90 @@ void desalocaVertice(ListaVertice *l)
     }
 }
 
-void representaGrafo(ListaVertice *cabListaV, char *nomArq) {
-    ListaVertice *auxV = cabListaV;
-    if (auxV == NULL) {
+int existeVertice(ListaVertice *grafo, char *no)
+{
+    int i = 0;
+    while (grafo != NULL)
+    {
+        if (strcmp(grafo->v, no) == 1)
+        {
+            return i;
+        }
+        i++;
+    }
+    return -1;
+
+}
+
+ListaVertice *insereVertice(ListaVertice *grafo, char *no)
+{
+    ListaVertice *aux = grafo;
+    if (aux == NULL)
+    {
+        aux = alocaVertice();
+        strcpy(aux->v, no);
+    }
+    while (aux->prox != NULL)
+    {
+        aux = aux->prox;
+    }
+    aux->prox = alocaVertice();
+    strcpy(aux->prox->v, no);
+    return aux;
+}
+
+ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
+{
+    ListaAresta *aux = listaAresta;
+    if (aux == NULL)
+    {
+        aux = alocaAresta();
+        strcpy(aux->v, v);
+        aux->peso = peso;
+    }
+    else
+    {
+        while (aux->prox != NULL)
+        {
+            aux = aux->prox;
+        }
+        aux->prox = alocaAresta();
+        strcpy(aux->prox->v, v);
+        aux->prox->peso = peso;
+    }
+    return aux;
+}
+
+ListaAresta *insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
+{
+    ListaVertice *auxV = grafo;
+    int posV = existeVertice(grafo, u);
+    if (posV == -1)
+    {
+        auxV = insereVertice(grafo, u);
+    }
+    else
+    {
+        while (strcmp(auxV->v, u) != 0)
+        {
+            auxV = auxV->prox;
+        }
+    }
+    if (heuristica)
+    {
+        return auxInsereAresta(auxV->listaHeuristica, v, peso);
+    }
+    else
+    {
+        return auxInsereAresta(auxV->listaAresta, v, peso);
+    }
+}
+
+void representaGrafo(ListaVertice *grafo, char *nomArq)
+{
+    ListaVertice *auxV = grafo;
+    if (auxV == NULL)
+    {
         printf("Grafo vazio\n");
         return;
     }
@@ -61,16 +142,18 @@ void representaGrafo(ListaVertice *cabListaV, char *nomArq) {
     g = agopen("Grafo", Agdirected, NULL);
 
     // Cria os nós no agraph
-    for (int i = 0; auxV != NULL ; i++, auxV = auxV->prox) {
+    for (int i = 0; auxV != NULL ; i++, auxV = auxV->prox)
+    {
         char nome[20];
         sprintf(nome, "%d", i);
         agnode(g, nome, 1);
     }
 
-    auxV = cabListaV;
+    auxV = grafo;
 
     // Cria as arestas no agraph
-    while(auxV != NULL) {
+    while(auxV != NULL)
+    {
         for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
             char peso[20];
             sprintf(peso, "%d", auxA->peso);
