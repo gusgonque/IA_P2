@@ -66,33 +66,36 @@ int existeVertice(ListaVertice *grafo, char *no)
     return -1;
 }
 
-void insereVertice(ListaVertice *grafo, char *no)
+ListaVertice * insereVertice(ListaVertice *grafo, char *no)
 {
-    ListaVertice *aux = grafo;
-    if (aux == NULL)
+    if (grafo == NULL)
     {
-        aux = alocaVertice();
-        strcpy(aux->v, no);
+        grafo = alocaVertice();
+        strcpy(grafo->v, no);
     }
-    while (aux->prox != NULL)
+    else
     {
-        aux = aux->prox;
+        ListaVertice *aux = grafo;
+        while (aux->prox != NULL) {
+            aux = aux->prox;
+        }
+        aux->prox = alocaVertice();
+        strcpy(aux->prox->v, no);
     }
-    aux->prox = alocaVertice();
-    strcpy(aux->prox->v, no);
+    return grafo;
 }
 
 ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
 {
-    ListaAresta *aux = listaAresta;
-    if (aux == NULL)
+    if (listaAresta == NULL)
     {
-        aux = alocaAresta();
-        strcpy(aux->v, v);
-        aux->peso = peso;
+        listaAresta = alocaAresta();
+        strcpy(listaAresta->v, v);
+        listaAresta->peso = peso;
     }
     else
     {
+        ListaAresta *aux = listaAresta;
         while (aux->prox != NULL)
         {
             aux = aux->prox;
@@ -101,13 +104,26 @@ ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
         strcpy(aux->prox->v, v);
         aux->prox->peso = peso;
     }
-    return aux;
+    return listaAresta;
 }
 
-void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
+ListaVertice * insereAresta(ListaVertice *grafo, char* u, char *v, int peso, bool heuristica)
 {
     ListaVertice *auxV = grafo;
-    int aux = existeVertice(auxV, u);
+    int aux = existeVertice(auxV, v);
+    if (aux == -1)
+    {
+        insereVertice(auxV, v);
+    }
+    else
+    {
+        for (int i = 0; i < aux; ++i) {
+            auxV = auxV->prox;
+        }
+    }
+
+    auxV = grafo;
+    aux = existeVertice(auxV, u);
     if (aux == -1)
     {
         insereVertice(auxV, u);
@@ -118,14 +134,17 @@ void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heurist
             auxV = auxV->prox;
         }
     }
+
     if (heuristica)
     {
-        auxInsereAresta(auxV->listaHeuristica, v, peso);
+        auxV->listaHeuristica = auxInsereAresta(auxV->listaHeuristica, v, peso);
     }
     else
     {
-        auxInsereAresta(auxV->listaAresta, v, peso);
+        auxV->listaAresta = auxInsereAresta(auxV->listaAresta, v, peso);
     }
+
+    return grafo;
 }
 
 //void representaGrafo(ListaVertice *grafo, char *nomArq)
@@ -193,14 +212,14 @@ void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heurist
 //    free(nomArqPng);
 //}
 
-int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
+ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
 {
     FILE *f = fopen(nomArq, "r");
 
     if (f == NULL)
     {
         perror("Erro abrindo arquivo");
-        return 1;
+        return grafo;
     }
 
     char linha[50], comando[20], conteudo[10];
@@ -225,28 +244,27 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
             char *peso = strtok(NULL, ","); // NULL para continuar a string anterior
             if (strcmp(comando, "pode_ir") == 0)
             {
-                insereVertice(grafo, tokenV);
-                insereAresta(grafo, tokenV, tokenA, atoi(peso), false);
+                grafo = insereVertice(grafo, tokenV);
+                grafo = insereAresta(grafo, tokenV, tokenA, atoi(peso), false);
 
             }
             else if (strcmp(comando, "h") == 0)
             {
-                insereVertice(grafo, tokenV);
-                insereAresta(grafo, tokenV, tokenA, atoi(peso), true);
+                grafo = insereVertice(grafo, tokenV);
+                grafo = insereAresta(grafo, tokenV, tokenA, atoi(peso), true);
             }
             else
             {
                 wprintf(L"Comando desconhecido no arquivo.\n");
-                return 1;
             }
         }
 
         memset(linha, 0, sizeof(linha));
         memset(conteudo, 0, sizeof(conteudo));
         memset(comando, 0, sizeof(comando));
-    }//
+    }
 
     fclose(f);
 
-    return 0;
+    return grafo;
 }
