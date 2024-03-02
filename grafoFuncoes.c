@@ -219,16 +219,17 @@ int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
         {
             char *tokenV = strtok(conteudo, ",");
             char *tokenA = strtok(NULL, ","); // NULL para continuar a string anterior
+            char *peso = strtok(NULL, ","); // NULL para continuar a string anterior
             if (strcmp(comando, "pode_ir") == 0)
             {
                 insereVertice(grafo, tokenV);
-                insereAresta(grafo, tokenV, tokenA, 0, false);
+                insereAresta(grafo, tokenV, tokenA, atoi(peso), false);
 
             }
             else if (strcmp(comando, "h") == 0)
             {
                 insereVertice(grafo, tokenV);
-                insereAresta(grafo, tokenV, tokenA, 0, true);
+                insereAresta(grafo, tokenV, tokenA, atoi(peso), true);
             }
             else
             {
