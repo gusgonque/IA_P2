@@ -9,7 +9,7 @@
 
 typedef struct noListaAresta
 {
-    char v[10]; // vertices da aresta u -> v
+    char v[10]; // vertice alvo
     unsigned int peso; // peso da aresta
     struct noListaAresta *prox; // proximo elemento da lista
 } ListaAresta;
@@ -30,6 +30,7 @@ void desalocaAresta(ListaAresta *l);
 
 void desalocaVertice(ListaVertice *l);
 
-
+// Função que representa o grafo em um arquivo .dot e .png
+void representaGrafo(ListaVertice *cabListaV, char *nomArq);
 
 #endif //IA_P2_FUNCTITONS_H

@@ -12,7 +12,7 @@ ListaAresta *alocaAresta()
 ListaVertice *alocaVertice()
 {
     ListaVertice *lAux = (ListaVertice *)malloc(sizeof(ListaVertice));
-    memset(lAux->u, 0, sizeof(lAux->u));
+    memset(lAux->v, 0, sizeof(lAux->v));
     lAux->prox = NULL;
     lAux->listaAresta = NULL;
     lAux->listaHeuristica = NULL;
@@ -41,7 +41,7 @@ void desalocaVertice(ListaVertice *l)
         aux = l->prox;
         desalocaAresta(l->listaAresta);
         desalocaAresta(l->listaHeuristica);
-        memset(l->u, 0, sizeof(l->u));
+        memset(l->v, 0, sizeof(l->v));
         free(l);
         l = aux;
     }
@@ -74,7 +74,7 @@ void representaGrafo(ListaVertice *cabListaV, char *nomArq) {
         for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
             char peso[20];
             sprintf(peso, "%d", auxA->peso);
-            Agnode_t* node1 = agnode(g, auxV->u, 0);
+            Agnode_t* node1 = agnode(g, auxV->v, 0);
             Agnode_t* node2 = agnode(g, auxA->v, 0);
             Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
             agsafeset(edge, "label", peso, "");
