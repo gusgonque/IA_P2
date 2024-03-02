@@ -47,18 +47,16 @@ void desalocaVertice(ListaVertice *l)
     }
 }
 
-int existeVertice(ListaVertice *grafo, char *no)
+bool existeVertice(ListaVertice *grafo, char *no)
 {
-    int i = 0;
     while (grafo != NULL)
     {
-        if (strcmp(grafo->v, no) == 1)
+        if (strcmp(grafo->v, no) == 0)
         {
-            return i;
+            return true;
         }
-        i++;
     }
-    return -1;
+    return false;
 
 }
 
@@ -103,8 +101,7 @@ ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
 void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
 {
     ListaVertice *auxV = grafo;
-    int posV = existeVertice(auxV, u);
-    if (posV == -1)
+    if (!existeVertice(auxV, u))
     {
         insereVertice(auxV, u);
     }
@@ -125,70 +122,70 @@ void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heurist
     }
 }
 
-void representaGrafo(ListaVertice *grafo, char *nomArq)
-{
-    ListaVertice *auxV = grafo;
-    if (auxV == NULL)
-    {
-        printf("Grafo vazio\n");
-        return;
-    }
-
-    GVC_t *gvc;
-    gvc = gvContext();
-
-    Agraph_t *g;
-    g = agopen("Grafo", Agdirected, NULL);
-
-    // Cria os nós no agraph
-    for (int i = 0; auxV != NULL ; i++, auxV = auxV->prox)
-    {
-        char nome[20];
-        sprintf(nome, "%d", i);
-        agnode(g, nome, 1);
-    }
-
-    auxV = grafo;
-
-    // Cria as arestas no agraph
-    while(auxV != NULL)
-    {
-        for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
-            char peso[20];
-            sprintf(peso, "%d", auxA->peso);
-            Agnode_t* node1 = agnode(g, auxV->v, 0);
-            Agnode_t* node2 = agnode(g, auxA->v, 0);
-            Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
-            agsafeset(edge, "label", peso, "");
-        }
-        auxV = auxV->prox;
-    }
-
-    char *nomArqDot = malloc(50 * sizeof(char));
-    strcpy(nomArqDot, nomArq);
-    strcat(nomArqDot, ".dot");
-
-    char *nomArqPng = malloc(50 * sizeof(char));
-    strcpy(nomArqPng, nomArq);
-    strcat(nomArqPng, ".png");
-
-    gvLayout(gvc, g, "dot");
-    gvRenderFilename(gvc, g, "dot", nomArqDot);
-    gvFreeLayout(gvc, g);
-
-    agclose(g);
-
-    gvFreeContext(gvc);
-
-    char comando[100];
-    sprintf(comando, "dot -Tpng %s -o %s", nomArqDot, nomArqPng);
-    system(comando);
-
-    wprintf(L" Arquivos criados com sucesso, com os nomes '%s' e '%s'!\n\n",nomArqDot,nomArqPng);
-
-    free(nomArqDot);
-    free(nomArqPng);
-}
+//void representaGrafo(ListaVertice *grafo, char *nomArq)
+//{
+//    ListaVertice *auxV = grafo;
+//    if (auxV == NULL)
+//    {
+//        printf("Grafo vazio\n");
+//        return;
+//    }
+//
+//    GVC_t *gvc;
+//    gvc = gvContext();
+//
+//    Agraph_t *g;
+//    g = agopen("Grafo", Agdirected, NULL);
+//
+//    // Cria os nós no agraph
+//    for (int i = 0; auxV != NULL ; i++, auxV = auxV->prox)
+//    {
+//        char nome[20];
+//        sprintf(nome, "%d", i);
+//        agnode(g, nome, 1);
+//    }
+//
+//    auxV = grafo;
+//
+//    // Cria as arestas no agraph
+//    while(auxV != NULL)
+//    {
+//        for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
+//            char peso[20];
+//            sprintf(peso, "%d", auxA->peso);
+//            Agnode_t* node1 = agnode(g, auxV->v, 0);
+//            Agnode_t* node2 = agnode(g, auxA->v, 0);
+//            Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
+//            agsafeset(edge, "label", peso, "");
+//        }
+//        auxV = auxV->prox;
+//    }
+//
+//    char *nomArqDot = malloc(50 * sizeof(char));
+//    strcpy(nomArqDot, nomArq);
+//    strcat(nomArqDot, ".dot");
+//
+//    char *nomArqPng = malloc(50 * sizeof(char));
+//    strcpy(nomArqPng, nomArq);
+//    strcat(nomArqPng, ".png");
+//
+//    gvLayout(gvc, g, "dot");
+//    gvRenderFilename(gvc, g, "dot", nomArqDot);
+//    gvFreeLayout(gvc, g);
+//
+//    agclose(g);
+//
+//    gvFreeContext(gvc);
+//
+//    char comando[100];
+//    sprintf(comando, "dot -Tpng %s -o %s", nomArqDot, nomArqPng);
+//    system(comando);
+//
+//    wprintf(L" Arquivos criados com sucesso, com os nomes '%s' e '%s'!\n\n",nomArqDot,nomArqPng);
+//
+//    free(nomArqDot);
+//    free(nomArqPng);
+//}
 
 int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
 {

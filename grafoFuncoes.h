@@ -32,7 +32,7 @@ void desalocaVertice(ListaVertice *l);
 
 // entrada: a lista q se deseja fazer a procura e o objeto a ser encontrado
 // saida: se existir na lista devolve a posição caso ao contrario devolve -1
-int existeVertice(ListaVertice *grafo, char *no);
+bool existeVertice(ListaVertice *grafo, char *no);
 
 // Retorna o nó inserido
 void insereVertice(ListaVertice *grafo, char *no);
@@ -43,7 +43,7 @@ ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso);
 void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica);
 
 // Função que representa o grafo em um arquivo .dot e .png
-void representaGrafo(ListaVertice *grafo, char *nomArq);
+//void representaGrafo(ListaVertice *grafo, char *nomArq);
 
 int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq);
 
