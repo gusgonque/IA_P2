@@ -3,19 +3,18 @@
 ListaAresta *alocaAresta()
 {
     ListaAresta *lAux = (ListaAresta *)malloc(sizeof(ListaAresta));
+    lAux->peso = -1;
+    lAux->heuristica = 0;
     lAux->prox = NULL;
-    lAux->peso = 0;
-    memset(lAux->v, 0, sizeof(lAux->v));
     return lAux;
 }
 
 ListaVertice *alocaVertice()
 {
     ListaVertice *lAux = (ListaVertice *)malloc(sizeof(ListaVertice));
-    memset(lAux->v, 0, sizeof(lAux->v));
+    memset(lAux->u, 0, sizeof(lAux->u));
     lAux->prox = NULL;
     lAux->listaAresta = NULL;
-    lAux->listaHeuristica = NULL;
     return lAux;
 }
 
@@ -25,7 +24,6 @@ void desalocaAresta(ListaAresta *l)
     while (l->prox != NULL)
     {
         aux = l->prox;
-        memset(l->v, 0, sizeof(l->v));
         free(l);
         l = aux;
     }
@@ -39,9 +37,8 @@ void desalocaVertice(ListaVertice *l)
     while (l != NULL)
     {
         aux = l->prox;
+        memset(l->u, 0, sizeof(l->u));
         desalocaAresta(l->listaAresta);
-        desalocaAresta(l->listaHeuristica);
-        memset(l->v, 0, sizeof(l->v));
         free(l);
         l = aux;
     }
@@ -53,10 +50,8 @@ int existeVertice(ListaVertice *grafo, char *no)
     ListaVertice *aux = grafo;
     while (aux != NULL)
     {
-        if (strcmp(aux->v, no) == 0)
-        {
+        if (strcmp(aux->u, no) == 0)
             return i;
-        }
         else
         {
             i++;
@@ -71,79 +66,74 @@ ListaVertice * insereVertice(ListaVertice *grafo, char *no)
     if (grafo == NULL)
     {
         grafo = alocaVertice();
-        strcpy(grafo->v, no);
+        strcpy(grafo->u, no);
     }
     else
     {
         ListaVertice *aux = grafo;
-        while (aux->prox != NULL) {
+        while (aux->prox != NULL)
             aux = aux->prox;
-        }
         aux->prox = alocaVertice();
-        strcpy(aux->prox->v, no);
+        strcpy(aux->prox->u, no);
     }
     return grafo;
 }
 
-ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
+ListaVertice *insereAresta(ListaVertice *grafo, char *u, char *v, int p, bool h)
 {
-    if (listaAresta == NULL)
+    int aux = existeVertice(grafo, v);
+    if (aux == -1)
     {
-        listaAresta = alocaAresta();
-        strcpy(listaAresta->v, v);
-        listaAresta->peso = peso;
+        grafo = insereVertice(grafo, v);
+        aux = existeVertice(grafo, v);
+    }
+    ListaVertice *auxVerticeV = grafo;
+    for (int i = 0; i < aux; ++i)
+        auxVerticeV = auxVerticeV->prox;
+
+    aux = existeVertice(grafo, u);
+    if (aux == -1)
+    {
+        grafo = insereVertice(grafo, u);
+        aux = existeVertice(grafo, u);
+    }
+    ListaVertice *auxVerticeU = grafo;
+    for (int i = 0; i < aux; ++i)
+        auxVerticeU = auxVerticeU->prox;
+
+    if (auxVerticeU->listaAresta == NULL)
+    {
+        auxVerticeU->listaAresta = alocaAresta();
+        auxVerticeU->listaAresta->v = auxVerticeV;
+        if (h)
+            auxVerticeU->listaAresta->heuristica = p;
+        else
+            auxVerticeU->listaAresta->peso = p;
     }
     else
     {
-        ListaAresta *aux = listaAresta;
-        while (aux->prox != NULL)
+        ListaAresta *auxAresta = auxVerticeU->listaAresta;
+        while (strcmp(auxAresta->v->u, auxVerticeV->u) != 0) // procura na lista de arestas de U, o vertice V
         {
-            aux = aux->prox;
+            if (auxAresta->prox == NULL)
+            {
+                auxAresta->prox = alocaAresta();
+                auxAresta->prox->v = auxVerticeV;
+                if (h)
+                    auxAresta->prox->heuristica = p;
+                else
+                    auxAresta->prox->peso = p;
+            } else
+                auxAresta = auxAresta->prox;
         }
-        aux->prox = alocaAresta();
-        strcpy(aux->prox->v, v);
-        aux->prox->peso = peso;
-    }
-    return listaAresta;
-}
-
-ListaVertice * insereAresta(ListaVertice *grafo, char* u, char *v, int peso, bool heuristica)
-{
-    ListaVertice *auxV = grafo;
-    int aux = existeVertice(auxV, v);
-    if (aux == -1)
-    {
-        insereVertice(auxV, v);
-    }
-    else
-    {
-        for (int i = 0; i < aux; ++i) {
-            auxV = auxV->prox;
+        if (strcmp(auxAresta->v->u, auxVerticeV->u) == 0)
+        {
+            if (h)
+                auxAresta->heuristica = p;
+            else
+                auxAresta->peso = p;
         }
     }
-
-    auxV = grafo;
-    aux = existeVertice(auxV, u);
-    if (aux == -1)
-    {
-        insereVertice(auxV, u);
-    }
-    else
-    {
-        for (int i = 0; i < aux; ++i) {
-            auxV = auxV->prox;
-        }
-    }
-
-    if (heuristica)
-    {
-        auxV->listaHeuristica = auxInsereAresta(auxV->listaHeuristica, v, peso);
-    }
-    else
-    {
-        auxV->listaAresta = auxInsereAresta(auxV->listaAresta, v, peso);
-    }
-
     return grafo;
 }
 
@@ -178,8 +168,8 @@ ListaVertice * insereAresta(ListaVertice *grafo, char* u, char *v, int peso, boo
 //        for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
 //            char peso[20];
 //            sprintf(peso, "%d", auxA->peso);
-//            Agnode_t* node1 = agnode(g, auxV->v, 0);
-//            Agnode_t* node2 = agnode(g, auxA->v, 0);
+//            Agnode_t* node1 = agnode(g, auxV->u, 0);
+//            Agnode_t* node2 = agnode(g, auxA->u, 0);
 //            Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
 //            agsafeset(edge, "label", peso, "");
 //        }
@@ -214,6 +204,9 @@ ListaVertice * insereAresta(ListaVertice *grafo, char* u, char *v, int peso, boo
 
 ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
 {
+    if (grafo != NULL)
+        desalocaVertice(grafo);
+
     FILE *f = fopen(nomArq, "r");
 
     if (f == NULL)
@@ -239,19 +232,17 @@ ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nom
         }
         else
         {
-            char *tokenV = strtok(conteudo, ",");
-            char *tokenA = strtok(NULL, ","); // NULL para continuar a string anterior
-            char *peso = strtok(NULL, ","); // NULL para continuar a string anterior
+            char *tokenU = strtok(conteudo, ",");
+            char *tokenV = strtok(NULL, ","); // NULL para continuar a string anterior
+            char *tokenP = strtok(NULL, ","); // NULL para continuar a string anterior
             if (strcmp(comando, "pode_ir") == 0)
             {
-                grafo = insereVertice(grafo, tokenV);
-                grafo = insereAresta(grafo, tokenV, tokenA, atoi(peso), false);
+                grafo = insereAresta(grafo, tokenU, tokenV, atoi(tokenP), false);
 
             }
             else if (strcmp(comando, "h") == 0)
             {
-                grafo = insereVertice(grafo, tokenV);
-                grafo = insereAresta(grafo, tokenV, tokenA, atoi(peso), true);
+                grafo = insereAresta(grafo, tokenU, tokenV, atoi(tokenP), true);
             }
             else
             {

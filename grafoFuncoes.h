@@ -7,18 +7,20 @@
 #include "C:/Program Files/Graphviz/include/graphviz/gvc.h"
 // LEMBRAR DE MUDAR O INCLUDE, CASO NECESSÁRIO
 
+
+// U -> V
+
 typedef struct noListaAresta
 {
-    char v[10]; // vertice alvo
-    unsigned int peso; // peso da aresta
+    struct noListaVertice *v; // vertice alvo
+    int peso; // peso da aresta
+    int heuristica; // heuristica da aresta
     struct noListaAresta *prox; // proximo elemento da lista
 } ListaAresta;
-
 typedef struct noListaVertice
 {
-    char v[10]; // o vertice
+    char u[10]; // o vertice
     struct noListaAresta *listaAresta; // lista de arestas sem heuristica saindo desse vertice
-    struct noListaAresta *listaHeuristica; // lista de arestas com heuristica saindo desse vertice
     struct noListaVertice *prox; // proximo elemento da lista
 } ListaVertice;
 
@@ -36,11 +38,6 @@ int existeVertice(ListaVertice *grafo, char *no);
 
 // Retorna o nó inserido
 ListaVertice * insereVertice(ListaVertice *grafo, char *no);
-
-ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso);
-
-// Retorna o nó inserido
-ListaVertice * insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica);
 
 // Função que representa o grafo em um arquivo .dot e .png
 //void representaGrafo(ListaVertice *grafo, char *nomArq);

@@ -1,6 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "grafoFuncoes.h"
 
 int main(){
@@ -12,7 +10,17 @@ int main(){
 
     printf("pI = %s\n", pontoInicial);
     printf("pF = %s\n", pontoFinal);
-    printf("Primeiro vertice do grafo = %s\n", grafo->v);
+    printf("Primeiro vertice do grafo = %s\n", grafo->u);
+    while (grafo != NULL)
+    {
+        printf("no = %s\n", grafo->u);
+        while (grafo->listaAresta != NULL)
+        {
+            printf("aresta = %s, peso = %d , heuristica = %d\n", grafo->listaAresta->v->u, grafo->listaAresta->peso, grafo->listaAresta->heuristica);
+            grafo->listaAresta = grafo->listaAresta->prox;
+        }
+        grafo = grafo->prox;
+    }
 
 
 }
