@@ -35,14 +35,16 @@ void desalocaVertice(ListaVertice *l);
 int existeVertice(ListaVertice *grafo, char *no);
 
 // Retorna o nó inserido
-ListaVertice *insereVertice(ListaVertice *grafo, char *no);
+void insereVertice(ListaVertice *grafo, char *no);
 
 ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso);
 
 // Retorna o nó inserido
-ListaAresta *insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica);
+void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica);
 
 // Função que representa o grafo em um arquivo .dot e .png
 void representaGrafo(ListaVertice *grafo, char *nomArq);
+
+int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq);
 
 #endif //IA_P2_GRAFOFUNCOES_H

@@ -62,7 +62,7 @@ int existeVertice(ListaVertice *grafo, char *no)
 
 }
 
-ListaVertice *insereVertice(ListaVertice *grafo, char *no)
+void insereVertice(ListaVertice *grafo, char *no)
 {
     ListaVertice *aux = grafo;
     if (aux == NULL)
@@ -76,7 +76,6 @@ ListaVertice *insereVertice(ListaVertice *grafo, char *no)
     }
     aux->prox = alocaVertice();
     strcpy(aux->prox->v, no);
-    return aux;
 }
 
 ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
@@ -101,13 +100,13 @@ ListaAresta *auxInsereAresta(ListaAresta *listaAresta, char *v, int peso)
     return aux;
 }
 
-ListaAresta *insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
+void insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool heuristica)
 {
     ListaVertice *auxV = grafo;
-    int posV = existeVertice(grafo, u);
+    int posV = existeVertice(auxV, u);
     if (posV == -1)
     {
-        auxV = insereVertice(grafo, u);
+        insereVertice(auxV, u);
     }
     else
     {
@@ -118,11 +117,11 @@ ListaAresta *insereAresta(ListaVertice * grafo, char* u, char *v, int peso, bool
     }
     if (heuristica)
     {
-        return auxInsereAresta(auxV->listaHeuristica, v, peso);
+        auxInsereAresta(auxV->listaHeuristica, v, peso);
     }
     else
     {
-        return auxInsereAresta(auxV->listaAresta, v, peso);
+        auxInsereAresta(auxV->listaAresta, v, peso);
     }
 }
 
@@ -189,4 +188,61 @@ void representaGrafo(ListaVertice *grafo, char *nomArq)
 
     free(nomArqDot);
     free(nomArqPng);
+}
+
+int leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
+{
+    FILE *f = fopen(nomArq, "r");
+
+    if (f == NULL)
+    {
+        perror("Erro abrindo arquivo");
+        return 1;
+    }
+
+    char linha[50], comando[20], conteudo[10];
+
+    while (fgets(linha, sizeof(linha), f) != NULL)
+    {
+        sscanf(linha, "%20[^()]", comando);
+        sscanf(linha, "%*[^(](%10[^)])", conteudo);
+
+        if (strcmp(comando, "ponto_inicial") == 0)
+        {
+            strcpy(inicio, conteudo);
+        }
+        else if (strcmp(comando, "ponto_final") == 0)
+        {
+            strcpy(fim, conteudo);
+        }
+        else
+        {
+            char *tokenV = strtok(conteudo, ",");
+            char *tokenA = strtok(NULL, ","); // NULL para continuar a string anterior
+            if (strcmp(comando, "pode_ir") == 0)
+            {
+                insereVertice(grafo, tokenV);
+                insereAresta(grafo, tokenV, tokenA, 0, false);
+
+            }
+            else if (strcmp(comando, "h") == 0)
+            {
+                insereVertice(grafo, tokenV);
+                insereAresta(grafo, tokenV, tokenA, 0, true);
+            }
+            else
+            {
+                wprintf(L"Comando desconhecido no arquivo.\n");
+                return 1;
+            }
+        }
+
+        memset(linha, 0, sizeof(linha));
+        memset(conteudo, 0, sizeof(conteudo));
+        memset(comando, 0, sizeof(comando));
+    }//
+
+    fclose(f);
+
+    return 0;
 }
