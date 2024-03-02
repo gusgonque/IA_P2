@@ -1,0 +1,35 @@
+#ifndef IA_P2_FUNCTITONS_H
+#define IA_P2_FUNCTITONS_H
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "C:/Program Files/Graphviz/include/graphviz/gvc.h"
+// LEMBRAR DE MUDAR O INCLUDE, CASO NECESSÁRIO
+
+typedef struct noListaAresta
+{
+    char v[10]; // vertices da aresta u -> v
+    int peso; // peso da aresta
+    unsigned int heuristica;
+    struct noListaAresta *prox; // proximo elemento da lista
+} ListaAresta;
+
+typedef struct noListaVertice
+{
+    char v[10]; // o vertice
+    struct noListaAresta *listaAresta; // lista de arestas saindo desse vertice
+    struct noListaVertice *prox; // proximo elemento da lista
+} ListaVertice;
+
+ListaAresta *alocaAresta();
+
+ListaVertice *alocaVertice();
+
+void desalocaAresta(ListaAresta *l);
+
+void desalocaVertice(ListaVertice *l);
+
+
+
+#endif //IA_P2_FUNCTITONS_H
