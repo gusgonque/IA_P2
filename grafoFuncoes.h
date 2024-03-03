@@ -39,6 +39,8 @@ int existeVertice(ListaVertice *grafo, char *no);
 // Retorna o nó inserido
 ListaVertice * insereVertice(ListaVertice *grafo, char *no);
 
+ListaVertice *insereAresta(ListaVertice *grafo, char *u, char *v, int p, bool h);
+
 // Função que representa o grafo em um arquivo .dot e .png
 //void representaGrafo(ListaVertice *grafo, char *nomArq);
 
