@@ -21,7 +21,7 @@ typedef struct noListaAresta
 typedef struct noListaVertice
 {
     char u[10]; // o vertice
-    struct noListaAresta *listaAresta; // lista de arestas sem heuristica saindo desse vertice
+    struct noListaAresta *listaAresta; // lista de arestas saindo desse vertice
     struct noListaVertice *prox; // proximo elemento da lista
 } ListaVertice;
 

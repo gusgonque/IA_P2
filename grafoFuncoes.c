@@ -177,7 +177,7 @@ int calculaNumeroVertices(ListaVertice *grafo)
 //    // Cria as arestas no agraph
 //    while(auxV != NULL)
 //    {
-//        for (ListaAresta* auxA = auxV->listaAresta; auxA != NULL; auxA = auxA->prox) {
+//        for (ListaAresta* auxA = auxV->listaArestaAdj; auxA != NULL; auxA = auxA->prox) {
 //            char peso[20];
 //            sprintf(peso, "%d", auxA->peso);
 //            Agnode_t* node1 = agnode(g, auxV->u, 0);
