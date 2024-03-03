@@ -47,6 +47,6 @@ int calculaNumeroVertices(ListaVertice *grafo);
 // Função que representa o grafo em um arquivo .dot e .png
 //void representaGrafo(ListaVertice *grafo, char *nomArq);
 
-ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq);
+ListaVertice * lerArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq);
 
 #endif //IA_P2_GRAFOFUNCOES_H

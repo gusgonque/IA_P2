@@ -214,23 +214,29 @@ int calculaNumeroVertices(ListaVertice *grafo)
 //    free(nomArqPng);
 //}
 
-ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
+ListaVertice * lerArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nomArq)
 {
-    if (grafo != NULL)
+    if (grafo != NULL) {
+        wprintf(L"Desalocando grafo antigo...\n");
+        memset(inicio, 0, sizeof(*inicio));
+        memset(fim, 0, sizeof(*fim));
         desalocaVertice(grafo);
+    }
 
     FILE *f = fopen(nomArq, "r");
 
     if (f == NULL)
     {
-        perror("Erro abrindo arquivo");
+        perror("Erro abrindo arquivo!");
         return grafo;
     }
 
     char linha[50], comando[20], conteudo[10];
 
+    int i = 0;
     while (fgets(linha, sizeof(linha), f) != NULL)
     {
+        i++;
         sscanf(linha, "%20[^()]", comando);
         sscanf(linha, "%*[^(](%10[^)])", conteudo);
 
@@ -258,7 +264,7 @@ ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nom
             }
             else
             {
-                wprintf(L"Comando desconhecido no arquivo.\n");
+                wprintf(L"Comando desconhecido no arquivo. (Linha %d)\n", i);
             }
         }
 
@@ -267,6 +273,7 @@ ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nom
         memset(comando, 0, sizeof(comando));
     }
 
+    wprintf(L"Arquivo lido com sucesso!\n");
     fclose(f);
 
     return grafo;

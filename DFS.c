@@ -19,7 +19,7 @@ void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int 
     gDFS[i].d = *t;
 
     if (strcmp(u, pFim) == 0) {
-        printf("\nVertice [%s] encontrado. T = %d, Peso Total = %d\n", pFim, *t, *pesoTotal);
+        wprintf(L"\nVértice [%s] encontrado. T = %d, Peso Total = %d\n", pFim, *t, *pesoTotal);
         *t = -1;
         return;
     }
@@ -28,7 +28,7 @@ void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int 
         int j = DFS_BuscaVertice(gDFS, auxAresta->v->u, nmrVertices);
 
         if (j == -1) {
-            printf("\nErro ao buscar o vertice [%s] no grafo DFS.\n", auxAresta->v->u);
+            printf("\nErro ao buscar o vértice [%s] no grafo DFS.\n", auxAresta->v->u);
             return;
         }
 
