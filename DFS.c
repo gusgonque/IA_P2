@@ -75,6 +75,10 @@ void DFS(ListaVertice *grafo, char *pInicio, char *pFim) {
         auxVerticeGrafo = auxVerticeGrafo->prox;
     }
     DFS_visit(gDFS, pInicio, pFim, t,pesoTotal, nmrVertices);
+
+    if(*t != -1)
+        wprintf(L"\nVértice [%s] não encontrado.\n", pFim);
+
     free(gDFS);
     free(t);
 }
