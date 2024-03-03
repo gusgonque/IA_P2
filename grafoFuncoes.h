@@ -4,9 +4,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "C:/Program Files/Graphviz/include/graphviz/gvc.h"
-// LEMBRAR DE MUDAR O INCLUDE, CASO NECESSÁRIO
+#include <stdbool.h>
 
+//#include <cgraph.h>
 
 // U -> V
 
@@ -17,6 +17,7 @@ typedef struct noListaAresta
     int heuristica; // heuristica da aresta
     struct noListaAresta *prox; // proximo elemento da lista
 } ListaAresta;
+
 typedef struct noListaVertice
 {
     char u[10]; // o vertice
@@ -40,6 +41,8 @@ int existeVertice(ListaVertice *grafo, char *no);
 ListaVertice * insereVertice(ListaVertice *grafo, char *no);
 
 ListaVertice *insereAresta(ListaVertice *grafo, char *u, char *v, int p, bool h);
+
+int calculaNumeroVertices(ListaVertice *grafo);
 
 // Função que representa o grafo em um arquivo .dot e .png
 //void representaGrafo(ListaVertice *grafo, char *nomArq);

@@ -137,6 +137,18 @@ ListaVertice *insereAresta(ListaVertice *grafo, char *u, char *v, int p, bool h)
     return grafo;
 }
 
+int calculaNumeroVertices(ListaVertice *grafo)
+{
+    int i = 0;
+    ListaVertice *aux = grafo;
+    while (aux != NULL)
+    {
+        i++;
+        aux = aux->prox;
+    }
+    return i;
+}
+
 //void representaGrafo(ListaVertice *grafo, char *nomArq)
 //{
 //    ListaVertice *auxV = grafo;
@@ -169,7 +181,7 @@ ListaVertice *insereAresta(ListaVertice *grafo, char *u, char *v, int p, bool h)
 //            char peso[20];
 //            sprintf(peso, "%d", auxA->peso);
 //            Agnode_t* node1 = agnode(g, auxV->u, 0);
-//            Agnode_t* node2 = agnode(g, auxA->u, 0);
+//            Agnode_t* node2 = agnode(g, auxA->v->u, 0);
 //            Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
 //            agsafeset(edge, "label", peso, "");
 //        }
@@ -259,3 +271,4 @@ ListaVertice * leArquivo(char *inicio, char *fim, ListaVertice *grafo, char *nom
 
     return grafo;
 }
+
