@@ -50,7 +50,12 @@ void guloso(ListaVertice *inicio, ListaVertice *fim)
                     if (strcmp(auxAA->no->u, auxAH->v->u) == 0)
                     {
                         auxAresta = auxAresta->prox;
+                        break;
                     }
+                }
+                if (strcmp(auxAA->no->u, auxAH->v->u) == 0)
+                {
+                        break;
                 }
                 if (auxAH == NULL) // n tem heuristica até o ponto final
                 {
