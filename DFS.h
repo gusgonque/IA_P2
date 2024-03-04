@@ -18,9 +18,11 @@ typedef struct GrafoDFS {
 }GrafoDFS;
 
 // Visita o grafo na posição u, e visita os vértices adjacentes a ele, que estão com a cor = 'B'.
+// Recebe o grafo, o vértice u, o vértice final, o timestamp, o peso total e o número de vértices.
 void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int nmrVertices);
 
 // Inicia um GrafoDFS vazio, e a partir do vértice inicial v, percorre o grafo a partir do algoritmo de busca em profundidade.
+// Recebe o grafo, o vértice inicial e o vértice final.
 void DFS(ListaVertice *grafo, char *pInicio, char *pFim);
 
 #endif //IA_P2_DFS_H

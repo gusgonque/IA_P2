@@ -17,9 +17,10 @@ void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int 
 
     (*t) ++;
     gDFS[i].d = *t;
+    (*pesoTotal) += gDFS[i].listaArestaAdj->peso;
 
     if (strcmp(u, pFim) == 0) {
-        wprintf(L"\nVértice [%s] encontrado. T = %d, Peso Total = %d\n", pFim, *t, *pesoTotal);
+        wprintf(L"\nVértice [%s] encontrado. T = %d, Peso Total = %d.\n", pFim, *t, *pesoTotal);
         *t = -1;
         return;
     }
@@ -28,7 +29,7 @@ void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int 
         int j = DFS_BuscaVertice(gDFS, auxAresta->v->u, nmrVertices);
 
         if (j == -1) {
-            printf("\nErro ao buscar o vértice [%s] no grafo DFS.\n", auxAresta->v->u);
+            wprintf(L"\nErro ao buscar o vértice [%s] no grafo DFS.\n", auxAresta->v->u);
             return;
         }
 
@@ -37,7 +38,6 @@ void DFS_visit(GrafoDFS *gDFS, char *u, char *pFim, int *t, int *pesoTotal, int 
             if(gDFS[j].cor == 'B'){
                 printf("-");
                 strcpy(gDFS[j].pi, u);
-                (*pesoTotal) += gDFS[i].listaArestaAdj->peso;
                 DFS_visit(gDFS, auxAresta->v->u, pFim, t, pesoTotal, nmrVertices);
             }
 

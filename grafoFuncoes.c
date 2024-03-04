@@ -4,7 +4,7 @@ ListaAresta *alocaAresta()
 {
     ListaAresta *lAux = (ListaAresta *)malloc(sizeof(ListaAresta));
     lAux->peso = -1;
-    lAux->heuristica = 0;
+    lAux->heuristica = -1;
     lAux->prox = NULL;
     return lAux;
 }
@@ -161,15 +161,15 @@ int calculaNumeroVertices(ListaVertice *grafo)
 //    GVC_t *gvc;
 //    gvc = gvContext();
 //
-//    Agraph_t *g;
-//    g = agopen("Grafo", Agdirected, NULL);
+//    Agraph_t *grafo;
+//    grafo = agopen("Grafo", Agdirected, NULL);
 //
 //    // Cria os nós no agraph
 //    for (int i = 0; auxV != NULL ; i++, auxV = auxV->prox)
 //    {
 //        char nome[20];
 //        sprintf(nome, "%d", i);
-//        agnode(g, nome, 1);
+//        agnode(grafo, nome, 1);
 //    }
 //
 //    auxV = grafo;
@@ -180,9 +180,9 @@ int calculaNumeroVertices(ListaVertice *grafo)
 //        for (ListaAresta* auxA = auxV->listaArestaAdj; auxA != NULL; auxA = auxA->prox) {
 //            char peso[20];
 //            sprintf(peso, "%d", auxA->peso);
-//            Agnode_t* node1 = agnode(g, auxV->u, 0);
-//            Agnode_t* node2 = agnode(g, auxA->v->u, 0);
-//            Agedge_t *edge = agedge(g, node1, node2, NULL, 1);
+//            Agnode_t* node1 = agnode(grafo, auxV->u, 0);
+//            Agnode_t* node2 = agnode(grafo, auxA->v->u, 0);
+//            Agedge_t *edge = agedge(grafo, node1, node2, NULL, 1);
 //            agsafeset(edge, "label", peso, "");
 //        }
 //        auxV = auxV->prox;
@@ -196,11 +196,11 @@ int calculaNumeroVertices(ListaVertice *grafo)
 //    strcpy(nomArqPng, nomArq);
 //    strcat(nomArqPng, ".png");
 //
-//    gvLayout(gvc, g, "dot");
-//    gvRenderFilename(gvc, g, "dot", nomArqDot);
-//    gvFreeLayout(gvc, g);
+//    gvLayout(gvc, grafo, "dot");
+//    gvRenderFilename(gvc, grafo, "dot", nomArqDot);
+//    gvFreeLayout(gvc, grafo);
 //
-//    agclose(g);
+//    agclose(grafo);
 //
 //    gvFreeContext(gvc);
 //
