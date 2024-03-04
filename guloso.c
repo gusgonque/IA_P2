@@ -35,13 +35,6 @@ void guloso(ListaVertice *inicio, ListaVertice *fim)
         {
             ListaAresta *auxAH = auxAresta->v->listaAresta; // ARESTAS DO NO q conecta a aresta atual
             CaminhoFinal *auxAA = final;
-            while (auxAA != NULL)
-            {
-                if (strcmp(auxAA->no->u, auxAresta->v->u) == 0)
-                {
-                    auxAresta = auxAresta->prox;
-                }
-            }  
             if (auxAresta->heuristica == -1)
             {
                 auxAresta = auxAresta->prox;
@@ -51,6 +44,13 @@ void guloso(ListaVertice *inicio, ListaVertice *fim)
                 while (auxAH != NULL && (strcmp(auxAH->v->u, fim->u) != 0)) // procura se tem heuristica ate o ponto final
                 {
                     auxAH = auxAH->prox;
+                }
+                while (auxAA != NULL)
+                {
+                    if (strcmp(auxAA->no->u, auxAH->v->u) == 0)
+                    {
+                        auxAresta = auxAresta->prox;
+                    }
                 }
                 if (auxAH == NULL) // n tem heuristica até o ponto final
                 {
