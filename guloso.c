@@ -35,7 +35,7 @@ void guloso(ListaVertice *inicio, ListaVertice *fim)
         {
             ListaAresta *auxAH = auxAresta->v->listaAresta; // ARESTAS DO NO q conecta a aresta atual
 
-            if (auxAresta->heuristica == -1)
+            if (auxAresta->heuristica == -1 || strcmp(auxf->no->u, auxAresta->v->u) == 0)
             {
                 auxAresta = auxAresta->prox;
             }
