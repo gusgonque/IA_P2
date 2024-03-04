@@ -2,6 +2,7 @@
 #include <locale.h>
 #include "grafoFuncoes.h"
 #include "DFS.h"
+#include "BFS.h"
 
 void menu (char *pontoInicial, char *pontoFinal, ListaVertice *grafo){
     int x;
@@ -9,6 +10,7 @@ void menu (char *pontoInicial, char *pontoFinal, ListaVertice *grafo){
     wprintf(L"Selecione uma opção:\n");
     wprintf(L"1 - Carregar arquivo de dados.\n");
     wprintf(L"2 - Busca em Profundidade. (Depht First Search)\n");
+    wprintf(L"3 - Busca em Largura. (Breadth First Search)\n");
 
     //wprintf(L"X - Representar grafo\n"); //TODO: Implementar função para desenhar grafo
     wprintf(L"0 - Finalizar programa.\n");
@@ -32,6 +34,16 @@ void menu (char *pontoInicial, char *pontoFinal, ListaVertice *grafo){
                 break;
             }
             DFS(grafo, pontoInicial, pontoFinal);
+            menu(pontoInicial, pontoFinal, grafo);
+            break;
+
+        case 3:
+            if (grafo == NULL) {
+                wprintf(L"Erro: Grafo não carregado.\n");
+                menu(pontoInicial, pontoFinal, grafo);
+                break;
+            }
+            BFS_visit(grafo, pontoInicial, pontoFinal);
             menu(pontoInicial, pontoFinal, grafo);
             break;
 

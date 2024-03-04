@@ -1,14 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include "grafoFuncoes.h"
-
-typedef struct caminho
-{
-    int total;
-    ListaVertice *no;
-} MenorCaminho;
+#include "guloso.h"
 
 MenorCaminho *alocaCaminhos()
 {
@@ -17,12 +7,6 @@ MenorCaminho *alocaCaminhos()
     aux->total = -1;
     return aux;
 }
-
-typedef struct cfinal
-{
-    ListaVertice *no;
-    struct cfinal *prox;
-}CaminhoFinal;
 
 CaminhoFinal *alocaFinal(){
     CaminhoFinal *aux = (CaminhoFinal *)malloc(sizeof(CaminhoFinal));
@@ -34,78 +18,86 @@ CaminhoFinal *alocaFinal(){
 
 void guloso(ListaVertice *inicio, ListaVertice *fim)
 {
-    ListaAresta *auxA = inicio->listaAresta;
+    ListaAresta *auxAresta = inicio->listaAresta;
     MenorCaminho *menorCaminho = alocaCaminhos();
+    menorCaminho->no = inicio;
     int heuristicaFinal = 0;
     int atual = 0;
     CaminhoFinal *final = alocaFinal();
+    final->no = inicio;
+
     CaminhoFinal *auxf = final;
     _Bool p = 0;
 
     while (strcmp(menorCaminho->no->u, fim->u) != 0)
     {
-        MenorCaminho *menorCaminho = alocaCaminhos();
-        while (auxA != NULL) // enquanto houver arestas, procura a menor
+        while (auxAresta != NULL) // enquanto houver arestas, procura a menor
         {
-            ListaAresta *auxAH = auxA->v->listaAresta; // ARESTAS DO NO q conecta a aresta atual
+            ListaAresta *auxAH = auxAresta->v->listaAresta; // ARESTAS DO NO q conecta a aresta atual
 
-            if (auxA->heuristica == -1)
+            if (auxAresta->heuristica == -1)
             {
-                auxA = auxA->prox;
+                auxAresta = auxAresta->prox;
             }
             else
             { // soma heuristica da aresta atual + heuristica do proximo nó ao nó final
-                while (auxAH != NULL && strcmp(auxAH->v->u, fim->u) != 0) // procura se tem heuristica ate o ponto final
+                while (auxAH != NULL && (strcmp(auxAH->v->u, fim->u) != 0)) // procura se tem heuristica ate o ponto final
                 {
                     auxAH = auxAH->prox;
                 }
                 if (auxAH == NULL) // n tem heuristica até o ponto final
                 {
-                    atual = auxA->heuristica;
+                    atual = auxAresta->heuristica;
                 }
                 else // tem heuristica até o ponto final
                 {
-                    atual = auxA->heuristica + auxAH->heuristica;
+                    atual = auxAresta->heuristica + auxAH->heuristica;
                 }
                 if (menorCaminho->total == -1) // primeiro caso
                 {
                     menorCaminho->total = atual;
-                    menorCaminho->no = auxA->v;
+                    menorCaminho->no = auxAresta->v;
                 }
                 if (menorCaminho->total > atual) // substitui se necessario pelo novo menor caminho
                 {
                     menorCaminho->total = atual;
-                    menorCaminho->no = auxA->v;
+                    menorCaminho->no = auxAresta->v;
                 }
             }
+
+            auxAresta = auxAresta->prox;
         }
-        if (auxA != NULL && strcmp(menorCaminho->no->u, fim->u) != 0)
+        if (auxAresta != NULL && strcmp(menorCaminho->no->u, fim->u) != 0)
         {
             printf("Caminho nao Encontrado: [%s]", final->no->u);
-            do
+            final = final->prox;
+            while (final != NULL)
             {
-                final = final->prox;
                 printf("->[%s]", final->no->u);
-            } while (final != NULL);
+                final = final->prox;
+            }
             printf("->[]\nHeuristica Total = %d", heuristicaFinal);
             p = 1;
             break;
         }
-        auxA = menorCaminho->no->listaAresta;
+        auxAresta = menorCaminho->no->listaAresta;
         menorCaminho->total = -1;
         heuristicaFinal += atual;
-        auxf->prox = menorCaminho->no;
-        printf("->[%s] h: %d", menorCaminho->no, atual);
+        auxf->prox = alocaFinal();
+        auxf = auxf->prox;
+        auxf->no = menorCaminho->no;
+        printf("->[%s] h: %d", menorCaminho->no->u, atual);
         atual = 0;
     }
-    if (p = 0)
+    if (p == 0)
     {
         printf("Caminho Encontrado: [%s]", final->no->u);
-        do
+        final = final->prox;
+        while (final != NULL)
         {
-            final = final->prox;
             printf("->[%s]", final->no->u);
-        } while (final != NULL);
+            final = final->prox;
+        }
         printf("\nHeuristica Total = %d", heuristicaFinal);
     }
 }
